@@ -67,14 +67,13 @@ public class TextProcessor {
 
         for (String word : words) {
             boolean hasDot = word.endsWith(".");
-            String coreWord = word.replace(".", "");
 
-            Map<Integer, Character> lettersMap = extractLettersWithPositions(coreWord); 
+            Map<Integer, Character> lettersMap = extractLettersWithPositions(word); 
             List<Character> letters = new ArrayList<>(lettersMap.values());
 
             Collections.reverse(letters);  
 
-            StringBuilder reversedWord = new StringBuilder(coreWord);
+            StringBuilder reversedWord = new StringBuilder(word);
             int letterIndex = 0;
             for (Map.Entry<Integer, Character> entry : lettersMap.entrySet()) {
                 reversedWord.setCharAt(entry.getKey(), letters.get(letterIndex));
@@ -86,12 +85,12 @@ public class TextProcessor {
                 isStartOfSentence = false;
             }
 
-            if (hasDot) {
-                reversedWord.append(".");
-                isStartOfSentence = true;
-            }
 
             sb.append(reversedWord).append(" ");
+            if (hasDot) {
+                isStartOfSentence = true;
+                sb.append("\n");
+            }
         }
 
         System.out.println("Druga dretva:\n" + sb.toString().trim() + "\n");
@@ -140,7 +139,6 @@ public class TextProcessor {
     public static void reverseSentences(String text) {
         BreakIterator iterator = BreakIterator.getSentenceInstance(Locale.US);
         ArrayList<String> sentencesList = new ArrayList<>();
-        StringBuilder sb = new StringBuilder();
 
         iterator.setText(text);
         int start = iterator.first();
@@ -153,11 +151,8 @@ public class TextProcessor {
         }
         
         Collections.reverse(sentencesList);
-        
-        for (String sentence : sentencesList) {
-            sb.append(sentence).append(" ");
-        }
-    	System.out.println("Četvrta dretva:\n"+sb.toString().trim()+"\n");
+        String result = String.join(" ", sentencesList);
+    	System.out.println("Četvrta dretva:\n"+result.trim()+"\n");
     }
 
     /**
